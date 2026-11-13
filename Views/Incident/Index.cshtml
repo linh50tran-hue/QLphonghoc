@@ -1,0 +1,142 @@
+@model IEnumerable<aznews.Models.Incident>
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Lịch sử báo cáo sự cố của tôi</h2>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item">Hỗ trợ & Sự cố</li>
+                <li class="breadcrumb-item active">Lịch sử báo cáo</li>
+            </ol>
+        </nav>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-1"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle me-1"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body pt-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Các sự cố đã gửi (@(Model?.Count() ?? 0))</h5>
+                    <a asp-action="Create" class="btn btn-danger btn-sm">
+                        <i class="bi bi-plus-circle"></i> Gửi báo cáo mới
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Mã</th>
+                                <th>Thời gian gửi</th>
+                                <th>Phòng học</th>
+                                <th>Thiết bị liên quan</th>
+                                <th>Mô tả sự cố</th>
+                                <th class="text-center">Ảnh minh chứng</th>
+                                <th class="text-center">Trạng thái xử lý</th>
+                                <th class="text-center" style="width: 110px;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>#@item.IncidentID</td>
+                                        <td>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>
+                                            <a asp-controller="Room" asp-action="Details" asp-route-id="@item.RoomID" class="fw-bold text-decoration-none">
+                                                @item.Room?.RoomName
+                                            </a>
+                                        </td>
+                                        <td>
+                                            @if (item.Device != null)
+                                            {
+                                                <span class="badge bg-light text-dark border">@item.Device.DeviceCode</span>
+                                                <div class="small fw-semibold">@item.Device.DeviceName</div>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted fst-italic">Sự cố chung của phòng</span>
+                                            }
+                                        </td>
+                                        <td>@item.Description</td>
+                                        <td class="text-center">
+                                            @if (!string.IsNullOrEmpty(item.ImageUrl))
+                                            {
+                                                <a href="@item.ImageUrl" target="_blank" title="Bấm để xem ảnh lớn">
+                                                    <img src="@item.ImageUrl" alt="Ảnh sự cố" style="width: 60px; height: 45px; object-fit: cover;" class="rounded border" />
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted small">Không có</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <span class="badge bg-warning text-dark">Chờ tiếp nhận</span>
+                                            }
+                                            else if (item.Status == "InProgress")
+                                            {
+                                                <span class="badge bg-info text-dark">Đang sửa chữa</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-success">Đã khắc phục</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <form asp-action="Delete" asp-route-id="@item.IncidentID" method="post" onsubmit="return confirm('Bạn muốn thu hồi báo cáo sự cố này?');">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Thu hồi báo cáo">
+                                                        <i class="bi bi-trash"></i> Thu hồi
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted small">—</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted py-4">
+                                        Bạn chưa gửi báo cáo sự cố nào.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

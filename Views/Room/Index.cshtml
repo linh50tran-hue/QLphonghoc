@@ -1,0 +1,85 @@
+@using aznews.Models
+@model IList<Room>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Danh sách phòng học</h2>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+            <div class="col-12">
+                <div class="card recent-sales overflow-auto">
+                    <div class="card-body mt-4">
+
+                        <table class="table table-borderless datatable">
+                            <thead>
+                                <tr>
+                                    <th class="col-1 text-center">STT</th>
+                                    <th class="col-3 text-center">Tên phòng</th>
+                                    <th class="col-3 text-center">Vị trí / Tòa nhà</th>
+                                    <th class="col-1 text-center">Sức chứa</th>
+                                    <th class="col-2 text-center">Trạng thái</th>
+                                    <th class="col-2 text-center">Chức năng</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ int i = 1; }
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <th class="text-center" scope="row">@(i++)</th>
+                                        <td>
+                                            <a asp-controller="Room" asp-action="Details" asp-route-id="@item.RoomID" class="text-primary fw-bold">
+                                                @item.RoomName
+                                            </a>
+                                        </td>
+                                        <td class="text-center">@item.Location</td>
+                                        <td class="text-center">@item.Capacity chỗ</td>
+                                        <td class="text-center">
+                                            @if (item.Status == "Available")
+                                            {
+                                                <span class="badge bg-success">Sẵn sàng</span>
+                                            }
+                                            else if (item.Status == "InUse")
+                                            {
+                                                <span class="badge bg-warning text-dark">Đang sử dụng</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Bảo trì</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            <a asp-controller="Room" asp-action="Details" asp-route-id="@item.RoomID" class="btn btn-primary btn-sm" title="Xem chi tiết">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+
+                                            @if (item.Status != "Maintenance")
+                                            {
+                                                <a asp-controller="Booking" asp-action="Create" asp-route-roomId="@item.RoomID" class="btn btn-success btn-sm" title="Đặt phòng này">
+                                                    <i class="bi bi-calendar-check"></i> Đặt phòng
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <button class="btn btn-secondary btn-sm" disabled title="Phòng đang bảo trì">
+                                                    <i class="bi bi-lock"></i>
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

@@ -1,0 +1,122 @@
+@model IEnumerable<aznews.Models.Booking>
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Lịch sử đặt phòng của tôi</h2>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Trang chủ</a></li>
+                <li class="breadcrumb-item">Phòng học & Thiết bị</li>
+                <li class="breadcrumb-item active">Lịch sử đặt phòng</li>
+            </ol>
+        </nav>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle me-1"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <section class="section">
+        <div class="card">
+            <div class="card-body pt-3">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">Danh sách yêu cầu đặt phòng (@(Model?.Count() ?? 0))</h5>
+                    <a asp-action="Create" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle"></i> Đặt phòng mới
+                    </a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Mã</th>
+                                <th>Phòng học</th>
+                                <th>Thời gian bắt đầu</th>
+                                <th>Thời gian kết thúc</th>
+                                <th>Mục đích sử dụng</th>
+                                <th class="text-center">Trạng thái</th>
+                                <th>Lý do từ chối</th>
+                                <th class="text-center" style="width: 110px;">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>#@item.BookingID</td>
+                                        <td>
+                                            <a asp-controller="Room" asp-action="Details" asp-route-id="@item.RoomID" class="fw-bold text-decoration-none">
+                                                @item.Room?.RoomName
+                                            </a>
+                                        </td>
+                                        <td>@item.StartTime.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@item.EndTime.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td>@item.Purpose</td>
+                                        <td class="text-center">
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                                            }
+                                            else if (item.Status == "Approved")
+                                            {
+                                                <span class="badge bg-success">Đã duyệt</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Từ chối</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(item.RejectReason))
+                                            {
+                                                <span class="text-danger small">@item.RejectReason</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted small">—</span>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            @if (item.Status == "Pending")
+                                            {
+                                                <form asp-action="Cancel" asp-route-id="@item.BookingID" method="post" onsubmit="return confirm('Bạn chắc chắn muốn hủy yêu cầu đặt phòng này?');">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-x-circle"></i> Hủy đơn
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted small">—</span>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted py-4">
+                                        Bạn chưa có lịch sử đặt phòng nào.
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

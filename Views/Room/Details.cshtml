@@ -1,0 +1,197 @@
+@model aznews.Models.Room
+
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var upcomingBookings = ViewBag.UpcomingBookings as List<aznews.Models.Booking>;
+    var roomDevices = ViewBag.RoomDevices as List<aznews.Models.Device>;
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Chi tiết phòng học</h2>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Room" asp-action="Index">Danh sách phòng học</a></li>
+                <li class="breadcrumb-item active">@Model.RoomName</li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="section profile">
+        <div class="row">
+            <!-- Cột trái: Thông tin chi tiết phòng -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <h5 class="card-title">Thông tin phòng - @Model.RoomName</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-4 col-md-4 label fw-bold">Mã phòng:</div>
+                            <div class="col-lg-8 col-md-8">#@Model.RoomID</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-4 col-md-4 label fw-bold">Tên phòng học:</div>
+                            <div class="col-lg-8 col-md-8 text-primary fw-bold fs-5">@Model.RoomName</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-4 col-md-4 label fw-bold">Vị trí / Tòa nhà:</div>
+                            <div class="col-lg-8 col-md-8">@Model.Location</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-4 col-md-4 label fw-bold">Sức chứa tối đa:</div>
+                            <div class="col-lg-8 col-md-8">@Model.Capacity chỗ ngồi</div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-lg-4 col-md-4 label fw-bold">Trạng thái hiện tại:</div>
+                            <div class="col-lg-8 col-md-8">
+                                @if (Model.Status == "Available")
+                                {
+                                    <span class="badge bg-success">Sẵn sàng</span>
+                                }
+                                else if (Model.Status == "InUse")
+                                {
+                                    <span class="badge bg-warning text-dark">Đang sử dụng</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Đang bảo trì</span>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top d-flex flex-wrap gap-2">
+                            <a asp-controller="Room" asp-action="Index" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Quay lại
+                            </a>
+
+                            @if (Model.Status != "Maintenance")
+                            {
+                                <a asp-controller="Booking" asp-action="Create" asp-route-roomId="@Model.RoomID" class="btn btn-success">
+                                    <i class="bi bi-calendar-check"></i> Đặt phòng này
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cột phải: Lịch phòng đã được đăng ký -->
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body pt-3">
+                        <h5 class="card-title">Lịch đăng ký sắp tới của phòng</h5>
+
+                        @if (upcomingBookings != null && upcomingBookings.Any())
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-sm align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Thời gian sử dụng</th>
+                                            <th>Mục đích</th>
+                                            <th>Trạng thái</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in upcomingBookings)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <small class="fw-bold">@item.StartTime.ToString("dd/MM/yyyy")</small><br />
+                                                    <small class="text-muted">@item.StartTime.ToString("HH:mm") - @item.EndTime.ToString("HH:mm")</small>
+                                                </td>
+                                                <td>@item.Purpose</td>
+                                                <td>
+                                                    @if (item.Status == "Approved")
+                                                    {
+                                                        <span class="badge bg-success">Đã duyệt</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="badge bg-warning text-dark">Chờ duyệt</span>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-info mb-0">
+                                <i class="bi bi-info-circle me-1"></i>
+                                Hiện tại phòng này chưa có lịch đăng ký nào sắp tới. Bạn có thể đặt ngay!
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+       <div class="row mt-3">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body pt-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="card-title mb-0">Danh sách trang thiết bị trong phòng</h5>
+                    <span class="badge bg-primary">Tổng: @(roomDevices?.Count ?? 0) loại thiết bị</span>
+                </div>
+
+                @if (roomDevices != null && roomDevices.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Mã thiết bị</th>
+                                    <th>Tên thiết bị</th>
+                                    <th class="text-center">Số lượng</th>
+                                    <th>Tình trạng</th>
+                                    <th>Ghi chú / Mô tả</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var device in roomDevices)
+                                {
+                                    <tr>
+                                        <td><span class="badge bg-light text-dark border">@device.DeviceCode</span></td>
+                                        <td class="fw-bold">@device.DeviceName</td>
+                                        <td class="text-center">@device.Quantity</td>
+                                        <td>
+                                            @if (device.Status == "Good")
+                                            {
+                                                <span class="badge bg-success">Hoạt động tốt</span>
+                                            }
+                                            else if (device.Status == "Maintenance")
+                                            {
+                                                <span class="badge bg-warning text-dark">Đang bảo trì</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-danger">Bị hỏng</span>
+                                            }
+                                        </td>
+                                        <td>@device.Description</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-secondary mb-0">
+                        Chưa có dữ liệu trang thiết bị được gán cho phòng học này.
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+    </section>
+</main>

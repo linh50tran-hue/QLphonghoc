@@ -1,0 +1,67 @@
+@model aznews.Models.Booking
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main id="main" class="main">
+    <div class="pagetitle">
+        <h2>Đăng ký đặt phòng học</h2>
+        <nav>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a asp-controller="Room" asp-action="Index">Danh sách phòng học</a></li>
+                <li class="breadcrumb-item active">Đặt phòng</li>
+            </ol>
+        </nav>
+    </div>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Phiếu đăng ký mượn phòng</h5>
+
+                        <form asp-action="Create" method="post" class="row g-3">
+                            <div asp-validation-summary="ModelOnly" class="text-danger fw-bold"></div>
+
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Phòng học đăng ký <span class="text-danger">*</span></label>
+                                <select asp-for="RoomID" asp-items="ViewBag.RoomList" class="form-select">
+                                    <option value="">-- Chọn phòng học --</option>
+                                </select>
+                                <span asp-validation-for="RoomID" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Thời gian bắt đầu <span class="text-danger">*</span></label>
+                                <input asp-for="StartTime" type="datetime-local" class="form-control" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                                <span asp-validation-for="StartTime" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Thời gian kết thúc <span class="text-danger">*</span></label>
+                                <input asp-for="EndTime" type="datetime-local" class="form-control" asp-format="{0:yyyy-MM-ddTHH:mm}" />
+                                <span asp-validation-for="EndTime" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Mục đích sử dụng <span class="text-danger">*</span></label>
+                                <textarea asp-for="Purpose" class="form-control" rows="3" placeholder="VD: Dạy bù môn C#, Họp nhóm đồ án..."></textarea>
+                                <span asp-validation-for="Purpose" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-12 mt-4">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="bi bi-send"></i> Gửi yêu cầu đặt phòng
+                                </button>
+                                <a asp-controller="Room" asp-action="Index" class="btn btn-secondary ms-2">Quay lại</a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
