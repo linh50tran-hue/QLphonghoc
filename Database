@@ -1,0 +1,396 @@
+USE [master]
+GO
+/****** Object:  Database [QLphonghoc]    Script Date: 11/13/2026 9:48:24 PM ******/
+CREATE DATABASE [QLphonghoc]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'QLphonghoc', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL17.SQLEXPRESS\MSSQL\DATA\QLphonghoc.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'QLphonghoc_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL17.SQLEXPRESS\MSSQL\DATA\QLphonghoc_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
+GO
+ALTER DATABASE [QLphonghoc] SET COMPATIBILITY_LEVEL = 170
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [QLphonghoc].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [QLphonghoc] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [QLphonghoc] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [QLphonghoc] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [QLphonghoc] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [QLphonghoc] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [QLphonghoc] SET  MULTI_USER 
+GO
+ALTER DATABASE [QLphonghoc] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [QLphonghoc] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [QLphonghoc] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [QLphonghoc] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [QLphonghoc] SET OPTIMIZED_LOCKING = OFF 
+GO
+ALTER DATABASE [QLphonghoc] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [QLphonghoc] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [QLphonghoc] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [QLphonghoc]
+GO
+/****** Object:  Table [dbo].[tblAdminMenu]    Script Date: 11/13/2026 9:48:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblAdminMenu](
+	[AdminMenuID] [int] IDENTITY(1,1) NOT NULL,
+	[ItemName] [nvarchar](255) NULL,
+	[ItemOrder] [int] NOT NULL,
+	[IsActive] [bit] NULL,
+	[ControllerName] [nvarchar](100) NOT NULL,
+	[ActionName] [nvarchar](100) NULL,
+	[Icon] [nvarchar](100) NULL,
+	[ParentLevel] [int] NOT NULL,
+	[ItemLevel] [int] NOT NULL,
+	[ItemTarget] [nvarchar](100) NULL,
+	[IdName] [nvarchar](100) NOT NULL,
+	[RoleAllowed] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[AdminMenuID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tblAdminUser]    Script Date: 11/13/2026 9:48:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblAdminUser](
+	[UserID] [int] IDENTITY(1,1) NOT NULL,
+	[UserName] [nvarchar](100) NULL,
+	[Email] [nvarchar](255) NULL,
+	[Password] [nvarchar](255) NULL,
+	[Role] [nvarchar](50) NULL,
+	[IsActive] [bit] NULL,
+ CONSTRAINT [PK_AdminUser] PRIMARY KEY CLUSTERED 
+(
+	[UserID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tblBooking]    Script Date: 11/13/2026 9:48:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblBooking](
+	[BookingID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [int] NOT NULL,
+	[RoomID] [int] NOT NULL,
+	[StartTime] [datetime] NOT NULL,
+	[EndTime] [datetime] NOT NULL,
+	[Purpose] [nvarchar](500) NOT NULL,
+	[Status] [nvarchar](50) NOT NULL,
+	[RejectReason] [nvarchar](500) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_tblBooking] PRIMARY KEY CLUSTERED 
+(
+	[BookingID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tblDevice]    Script Date: 11/13/2026 9:48:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblDevice](
+	[DeviceID] [int] IDENTITY(1,1) NOT NULL,
+	[DeviceCode] [nvarchar](50) NOT NULL,
+	[DeviceName] [nvarchar](100) NOT NULL,
+	[RoomID] [int] NOT NULL,
+	[Status] [nvarchar](50) NOT NULL,
+	[IsActive] [bit] NULL,
+	[Description] [nvarchar](50) NOT NULL,
+	[Quantity] [int] NOT NULL,
+ CONSTRAINT [PK_tblDevice] PRIMARY KEY CLUSTERED 
+(
+	[DeviceID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tblIncident]    Script Date: 11/13/2026 9:48:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblIncident](
+	[IncidentID] [int] IDENTITY(1,1) NOT NULL,
+	[UserID] [int] NOT NULL,
+	[RoomID] [int] NOT NULL,
+	[DeviceID] [int] NULL,
+	[Description] [nvarchar](max) NOT NULL,
+	[ImageUrl] [nvarchar](500) NULL,
+	[Status] [nvarchar](50) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+ CONSTRAINT [PK_tblIncident] PRIMARY KEY CLUSTERED 
+(
+	[IncidentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tblRoom]    Script Date: 11/13/2026 9:48:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblRoom](
+	[RoomID] [int] IDENTITY(1,1) NOT NULL,
+	[RoomName] [nvarchar](100) NOT NULL,
+	[Capacity] [int] NOT NULL,
+	[Location] [nvarchar](255) NOT NULL,
+	[Status] [nvarchar](50) NOT NULL,
+	[IsActive] [bit] NULL,
+	[Description] [nvarchar](255) NULL,
+	[Quantity] [int] NOT NULL,
+ CONSTRAINT [PK_tblRoom] PRIMARY KEY CLUSTERED 
+(
+	[RoomID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[tblUserMenu]    Script Date: 11/13/2026 9:48:24 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[tblUserMenu](
+	[MenuID] [int] IDENTITY(1,1) NOT NULL,
+	[ItemName] [nvarchar](100) NOT NULL,
+	[ItemOrder] [int] NOT NULL,
+	[IsActive] [bit] NOT NULL,
+	[ControllerName] [nvarchar](100) NOT NULL,
+	[ActionName] [nvarchar](100) NOT NULL,
+	[Icon] [nvarchar](100) NOT NULL,
+	[ParentLevel] [int] NOT NULL,
+	[ItemLevel] [int] NOT NULL,
+	[ItemTarget] [nvarchar](100) NOT NULL,
+	[IdName] [nvarchar](100) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[MenuID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET IDENTITY_INSERT [dbo].[tblAdminMenu] ON 
+
+INSERT [dbo].[tblAdminMenu] ([AdminMenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName], [RoleAllowed]) VALUES (20, N'Thiết bị phòng học', 2, 1, N'Device', N'Index', N'', 18, 2, N'', N'', N'ADMIN')
+INSERT [dbo].[tblAdminMenu] ([AdminMenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName], [RoleAllowed]) VALUES (23, N'Lịch sử báo cáo', 2, 1, N'Incident', N'Index', N'', 21, 2, N'', N'', N'User,Admin')
+INSERT [dbo].[tblAdminMenu] ([AdminMenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName], [RoleAllowed]) VALUES (31, N'Quản lý hệ thống', 1, 1, N'', N'', N'bi bi-menu-button-wide', 0, 1, N'system-nav', N'system-nav', N'All')
+INSERT [dbo].[tblAdminMenu] ([AdminMenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName], [RoleAllowed]) VALUES (32, N'Quản lý phòng học', 1, 1, N'Room', N'Index', N'', 31, 2, N'', N'', N'All')
+INSERT [dbo].[tblAdminMenu] ([AdminMenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName], [RoleAllowed]) VALUES (33, N'Quản lý thiết bị', 2, 1, N'Device', N'Index', N'', 31, 2, N'', N'', N'All')
+INSERT [dbo].[tblAdminMenu] ([AdminMenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName], [RoleAllowed]) VALUES (34, N'Duyệt đặt phòng', 3, 1, N'Booking', N'Index', N'', 31, 2, N'', N'', N'All')
+INSERT [dbo].[tblAdminMenu] ([AdminMenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName], [RoleAllowed]) VALUES (35, N'Xử lý sự cố', 4, 1, N'Incident', N'Index', N'', 31, 2, N'', N'', N'All')
+SET IDENTITY_INSERT [dbo].[tblAdminMenu] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tblAdminUser] ON 
+
+INSERT [dbo].[tblAdminUser] ([UserID], [UserName], [Email], [Password], [Role], [IsActive]) VALUES (1, N'admin', N'admin@gmail.com', N'123456', N'Admin', 1)
+INSERT [dbo].[tblAdminUser] ([UserID], [UserName], [Email], [Password], [Role], [IsActive]) VALUES (2, N'giangvien1', N'gv1@gmail.com', N'123456', N'User', 1)
+SET IDENTITY_INSERT [dbo].[tblAdminUser] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tblBooking] ON 
+
+INSERT [dbo].[tblBooking] ([BookingID], [UserID], [RoomID], [StartTime], [EndTime], [Purpose], [Status], [RejectReason], [CreatedDate]) VALUES (2, 1, 8, CAST(N'2026-11-15T07:00:00.000' AS DateTime), CAST(N'2026-11-15T09:30:00.000' AS DateTime), N'Dạy bù môn Lập trình Web ASP.NET Core', N'Approved', NULL, CAST(N'2026-11-12T22:13:14.000' AS DateTime))
+INSERT [dbo].[tblBooking] ([BookingID], [UserID], [RoomID], [StartTime], [EndTime], [Purpose], [Status], [RejectReason], [CreatedDate]) VALUES (3, 1, 9, CAST(N'2026-11-15T13:30:00.000' AS DateTime), CAST(N'2026-11-15T16:00:00.000' AS DateTime), N'Họp nhóm đồ án chuyên ngành CNTT', N'Pending', NULL, CAST(N'2026-11-12T22:13:14.000' AS DateTime))
+INSERT [dbo].[tblBooking] ([BookingID], [UserID], [RoomID], [StartTime], [EndTime], [Purpose], [Status], [RejectReason], [CreatedDate]) VALUES (4, 1, 11, CAST(N'2026-11-16T08:00:00.000' AS DateTime), CAST(N'2026-11-16T11:00:00.000' AS DateTime), N'Thực hành cấu trúc dữ liệu và giải thuật', N'Approved', NULL, CAST(N'2026-11-12T22:13:14.000' AS DateTime))
+INSERT [dbo].[tblBooking] ([BookingID], [UserID], [RoomID], [StartTime], [EndTime], [Purpose], [Status], [RejectReason], [CreatedDate]) VALUES (5, 1, 12, CAST(N'2026-11-16T14:00:00.000' AS DateTime), CAST(N'2026-11-16T17:00:00.000' AS DateTime), N'Tổ chức seminar CLB Tin học', N'Rejected', N'Phòng đã có lịch bảo trì thiết bị âm thanh đột xuất', CAST(N'2026-11-12T22:13:14.000' AS DateTime))
+INSERT [dbo].[tblBooking] ([BookingID], [UserID], [RoomID], [StartTime], [EndTime], [Purpose], [Status], [RejectReason], [CreatedDate]) VALUES (6, 1, 15, CAST(N'2026-11-17T09:00:00.000' AS DateTime), CAST(N'2026-11-17T11:30:00.000' AS DateTime), N'Ôn tập thi giữa kỳ môn Cơ sở dữ liệu', N'Pending', NULL, CAST(N'2026-11-12T22:13:14.000' AS DateTime))
+SET IDENTITY_INSERT [dbo].[tblBooking] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tblDevice] ON 
+
+INSERT [dbo].[tblDevice] ([DeviceID], [DeviceCode], [DeviceName], [RoomID], [Status], [IsActive], [Description], [Quantity]) VALUES (17, N'MC-0801', N'Máy chiếu Epson EB-X06', 8, N'Good', 1, N'Độ phân giải XGA, kèm điều khiển và cáp HDMI', 1)
+SET IDENTITY_INSERT [dbo].[tblDevice] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tblRoom] ON 
+
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (8, N'Phòng 1A101', 60, N'Tầng 1 - Nhà A1', N'Available', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (9, N'Phòng 1A102', 60, N'Tầng 1 - Nhà A1', N'Available', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (10, N'Phòng 1A103', 60, N'Tầng 1 - Nhà A1', N'Available', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (11, N'Phòng 2A104', 60, N'Tầng 1 - Nhà A2', N'Available', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (12, N'Phòng 1A203', 60, N'Tầng 2 - Nhà A1', N'Available', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (13, N'Phòng 2A204', 60, N'Tầng 2 - Nhà A2', N'Available', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (14, N'Phòng Lab A201', 45, N'Tầng 2 - Nhà A1', N'Available', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (15, N'Phòng Lab A202', 45, N'Tầng 2 - Nhà A1', N'Available', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (16, N'Phòng B101', 80, N'Tầng 1 - Nhà B1', N'Available', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (17, N'Phòng B102', 80, N'Tầng 1 - Nhà B1', N'Maintenance', 1, NULL, 1)
+INSERT [dbo].[tblRoom] ([RoomID], [RoomName], [Capacity], [Location], [Status], [IsActive], [Description], [Quantity]) VALUES (18, N'Phòng Lab B203', 50, N'Tầng 2 - Nhà B1', N'Available', 1, NULL, 1)
+SET IDENTITY_INSERT [dbo].[tblRoom] OFF
+GO
+SET IDENTITY_INSERT [dbo].[tblUserMenu] ON 
+
+INSERT [dbo].[tblUserMenu] ([MenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName]) VALUES (1, N'Phòng học & Thiết bị', 1, 1, N'', N'', N'bi bi-building', 0, 1, N'csvc-nav', N'csvc-nav')
+INSERT [dbo].[tblUserMenu] ([MenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName]) VALUES (2, N'Hỗ trợ & Sự cố', 2, 1, N'', N'', N'bi bi-exclamation-triangle', 0, 1, N'suco-nav', N'suco-nav')
+INSERT [dbo].[tblUserMenu] ([MenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName]) VALUES (3, N'Danh sách phòng học', 1, 1, N'Room', N'Index', N'', 1, 2, N'', N'')
+INSERT [dbo].[tblUserMenu] ([MenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName]) VALUES (4, N'Lịch sử đặt phòng của tôi', 4, 1, N'Booking', N'Index', N'', 1, 2, N'', N'')
+INSERT [dbo].[tblUserMenu] ([MenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName]) VALUES (5, N'Gửi báo cáo sự cố', 1, 1, N'Incident', N'Create', N'', 2, 2, N'', N'')
+INSERT [dbo].[tblUserMenu] ([MenuID], [ItemName], [ItemOrder], [IsActive], [ControllerName], [ActionName], [Icon], [ParentLevel], [ItemLevel], [ItemTarget], [IdName]) VALUES (6, N'Lịch sử báo cáo', 2, 1, N'Incident', N'Index', N'', 2, 2, N'', N'')
+SET IDENTITY_INSERT [dbo].[tblUserMenu] OFF
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [UX_tblRoom_RoomName]    Script Date: 11/13/2026 9:48:25 PM ******/
+CREATE UNIQUE NONCLUSTERED INDEX [UX_tblRoom_RoomName] ON [dbo].[tblRoom]
+(
+	[RoomName] ASC
+)
+WHERE ([RoomName]<>N'')
+WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[tblAdminMenu] ADD  DEFAULT ('All') FOR [RoleAllowed]
+GO
+ALTER TABLE [dbo].[tblAdminUser] ADD  CONSTRAINT [DF_AdminUser_Role]  DEFAULT (N'Teacher') FOR [Role]
+GO
+ALTER TABLE [dbo].[tblAdminUser] ADD  CONSTRAINT [DF_AdminUser_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+ALTER TABLE [dbo].[tblBooking] ADD  CONSTRAINT [DF_tblBooking_Purpose]  DEFAULT (N'') FOR [Purpose]
+GO
+ALTER TABLE [dbo].[tblBooking] ADD  CONSTRAINT [DF_tblBooking_Status]  DEFAULT (N'Pending') FOR [Status]
+GO
+ALTER TABLE [dbo].[tblBooking] ADD  CONSTRAINT [DF_tblBooking_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+ALTER TABLE [dbo].[tblDevice] ADD  CONSTRAINT [DF_tblDevice_DeviceCode]  DEFAULT (N'') FOR [DeviceCode]
+GO
+ALTER TABLE [dbo].[tblDevice] ADD  CONSTRAINT [DF_tblDevice_DeviceName]  DEFAULT (N'') FOR [DeviceName]
+GO
+ALTER TABLE [dbo].[tblDevice] ADD  CONSTRAINT [DF_tblDevice_Status]  DEFAULT (N'Working') FOR [Status]
+GO
+ALTER TABLE [dbo].[tblDevice] ADD  CONSTRAINT [DF_tblDevice_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+ALTER TABLE [dbo].[tblIncident] ADD  CONSTRAINT [DF_tblIncident_Description]  DEFAULT (N'') FOR [Description]
+GO
+ALTER TABLE [dbo].[tblIncident] ADD  CONSTRAINT [DF_tblIncident_Status]  DEFAULT (N'Reported') FOR [Status]
+GO
+ALTER TABLE [dbo].[tblIncident] ADD  CONSTRAINT [DF_tblIncident_CreatedDate]  DEFAULT (getdate()) FOR [CreatedDate]
+GO
+ALTER TABLE [dbo].[tblRoom] ADD  CONSTRAINT [DF_tblRoom_RoomName]  DEFAULT (N'') FOR [RoomName]
+GO
+ALTER TABLE [dbo].[tblRoom] ADD  CONSTRAINT [DF_tblRoom_Capacity]  DEFAULT ((0)) FOR [Capacity]
+GO
+ALTER TABLE [dbo].[tblRoom] ADD  CONSTRAINT [DF_tblRoom_Location]  DEFAULT (N'') FOR [Location]
+GO
+ALTER TABLE [dbo].[tblRoom] ADD  CONSTRAINT [DF_tblRoom_Status]  DEFAULT (N'Available') FOR [Status]
+GO
+ALTER TABLE [dbo].[tblRoom] ADD  CONSTRAINT [DF_tblRoom_IsActive]  DEFAULT ((1)) FOR [IsActive]
+GO
+ALTER TABLE [dbo].[tblRoom] ADD  DEFAULT ((1)) FOR [Quantity]
+GO
+ALTER TABLE [dbo].[tblUserMenu] ADD  DEFAULT ((1)) FOR [ItemOrder]
+GO
+ALTER TABLE [dbo].[tblUserMenu] ADD  DEFAULT ((1)) FOR [IsActive]
+GO
+ALTER TABLE [dbo].[tblUserMenu] ADD  DEFAULT ('') FOR [ControllerName]
+GO
+ALTER TABLE [dbo].[tblUserMenu] ADD  DEFAULT ('') FOR [ActionName]
+GO
+ALTER TABLE [dbo].[tblUserMenu] ADD  DEFAULT ('') FOR [Icon]
+GO
+ALTER TABLE [dbo].[tblUserMenu] ADD  DEFAULT ((0)) FOR [ParentLevel]
+GO
+ALTER TABLE [dbo].[tblUserMenu] ADD  DEFAULT ((1)) FOR [ItemLevel]
+GO
+ALTER TABLE [dbo].[tblUserMenu] ADD  DEFAULT ('') FOR [ItemTarget]
+GO
+ALTER TABLE [dbo].[tblUserMenu] ADD  DEFAULT ('') FOR [IdName]
+GO
+ALTER TABLE [dbo].[tblBooking]  WITH CHECK ADD  CONSTRAINT [FK_tblBooking_AdminUser] FOREIGN KEY([UserID])
+REFERENCES [dbo].[tblAdminUser] ([UserID])
+GO
+ALTER TABLE [dbo].[tblBooking] CHECK CONSTRAINT [FK_tblBooking_AdminUser]
+GO
+ALTER TABLE [dbo].[tblBooking]  WITH CHECK ADD  CONSTRAINT [FK_tblBooking_tblRoom] FOREIGN KEY([RoomID])
+REFERENCES [dbo].[tblRoom] ([RoomID])
+GO
+ALTER TABLE [dbo].[tblBooking] CHECK CONSTRAINT [FK_tblBooking_tblRoom]
+GO
+ALTER TABLE [dbo].[tblDevice]  WITH CHECK ADD  CONSTRAINT [FK_tblDevice_tblRoom] FOREIGN KEY([RoomID])
+REFERENCES [dbo].[tblRoom] ([RoomID])
+GO
+ALTER TABLE [dbo].[tblDevice] CHECK CONSTRAINT [FK_tblDevice_tblRoom]
+GO
+ALTER TABLE [dbo].[tblIncident]  WITH CHECK ADD  CONSTRAINT [FK_tblIncident_AdminUser] FOREIGN KEY([UserID])
+REFERENCES [dbo].[tblAdminUser] ([UserID])
+GO
+ALTER TABLE [dbo].[tblIncident] CHECK CONSTRAINT [FK_tblIncident_AdminUser]
+GO
+ALTER TABLE [dbo].[tblIncident]  WITH CHECK ADD  CONSTRAINT [FK_tblIncident_tblDevice] FOREIGN KEY([DeviceID])
+REFERENCES [dbo].[tblDevice] ([DeviceID])
+GO
+ALTER TABLE [dbo].[tblIncident] CHECK CONSTRAINT [FK_tblIncident_tblDevice]
+GO
+ALTER TABLE [dbo].[tblIncident]  WITH CHECK ADD  CONSTRAINT [FK_tblIncident_tblRoom] FOREIGN KEY([RoomID])
+REFERENCES [dbo].[tblRoom] ([RoomID])
+GO
+ALTER TABLE [dbo].[tblIncident] CHECK CONSTRAINT [FK_tblIncident_tblRoom]
+GO
+ALTER TABLE [dbo].[tblRoom]  WITH CHECK ADD  CONSTRAINT [CK_tblRoom_Capacity] CHECK  (([Capacity]>=(0)))
+GO
+ALTER TABLE [dbo].[tblRoom] CHECK CONSTRAINT [CK_tblRoom_Capacity]
+GO
+ALTER TABLE [dbo].[tblRoom]  WITH CHECK ADD  CONSTRAINT [CK_tblRoom_Status] CHECK  (([Status]='Maintenance' OR [Status]='InUse' OR [Status]='Available'))
+GO
+ALTER TABLE [dbo].[tblRoom] CHECK CONSTRAINT [CK_tblRoom_Status]
+GO
+USE [master]
+GO
+ALTER DATABASE [QLphonghoc] SET  READ_WRITE 
+GO
